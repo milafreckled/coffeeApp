@@ -1,0 +1,8 @@
+#btn-create{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+mat-card{
+    padding: 20px;
+}

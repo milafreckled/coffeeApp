@@ -1,0 +1,49 @@
+{
+    "routing": {
+    "index": "/index.html",
+    "routes": {
+        "/": {
+            "match": "exact"
+        },
+        "/coffee": {
+            "match": "prefix"
+        }
+    },
+    "static.ignore": [
+        "^\/icons\/.*"
+    ],
+    "external": {
+        "urls": [
+            {
+                "url": "https://fonts.googleapis.com/icon?family=Material+Icons"
+            },
+            {
+                "url": "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
+            }
+        ]
+    },
+    "dynamic": {
+        "group": [
+            {
+                "name": "api",
+                "urls": {
+                    "http://localhost:3000/coffees": {
+                        "match": "prefix"
+                    }
+                },
+                "cache": {
+                    "optimizeFor": "freshness",
+                    "networkTimeoutMs": 1000,
+                    "maxEntries": 30,
+                    "strategy": "lru",
+                    "maxAgeMs": 360000000
+                }
+            }
+        ]
+    },
+    "push": {
+        "showNotifications": true,
+        "backgroundOnly": false
+    }
+}
+}

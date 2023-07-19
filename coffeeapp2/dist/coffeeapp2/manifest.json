@@ -1,0 +1,29 @@
+{
+    "name": "Coffee check - ratings of coffee from places all around the woprld.",
+    "start_url": "/",
+    "orientation": "any",
+    "scope": "/",
+    "display": "standalone",
+    "short_name": "Coffee check",
+    "theme_color": "#634F38",
+    "background_color": "#C8BDAE",
+    "icons": [
+        {
+            "src": "icons/coffee_64x64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/coffee_128x128.png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "icons/coffee_256x256.png",
+            "sizes": "256x256"
+        },
+        {
+            "src": "icons/coffee_512x512.png",
+            "sizes": "512x512"
+        }
+    ]
+}

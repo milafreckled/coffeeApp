@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class Coffee {\n  constructor(name = \"\", place = \"\", location = null) {\n    this.name = name;\n    this.place = place;\n    this.location = location;\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
