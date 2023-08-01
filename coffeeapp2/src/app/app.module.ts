@@ -25,6 +25,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import {  authCheckFunction } from './authCheckFunction';
 import { RegisterComponent } from './register/register.component';
+import { AuthService } from './auth.service';
 
 const routes: Routes = [
   { path: "", canActivate: [authCheckFunction()], component: ListComponent},
@@ -62,7 +63,7 @@ const routes: Routes = [
   ],
   providers: [
     GeoLocationService, DataService,
-    BrowserAnimationsModule],
+    BrowserAnimationsModule, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
