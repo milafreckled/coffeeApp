@@ -6,6 +6,8 @@ import { GeoLocationService } from '../geo-location.service';
 import { TastingRating } from '../logic/TastingRating';
 import { DataService } from '../data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { User } from '../logic/User';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-coffee',
   templateUrl: './coffee.component.html',
@@ -13,8 +15,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 
 export class CoffeeComponent implements OnInit{
+  currentUser!: User;
   constructor(private route: ActivatedRoute, private geolocation: GeoLocationService,
-    private router: Router, private data: DataService){}
+    private router: Router, private data: DataService, private auth: AuthService){
+}
   coffee!: Coffee;
   coffeeId!: number;
   routingSubscription!: Subscription;
@@ -23,6 +27,7 @@ export class CoffeeComponent implements OnInit{
   newCoffeeGroup = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z_]+( [a-zA-Z_]+)*$/)]),
     place: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z_]+( [a-zA-Z_]+)*$/)]),
+    rating: new FormControl(0, [Validators.required]),
     location: new FormControl('', [Validators.pattern(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/)]),
     city: new FormControl('', [Validators.pattern(/^[a-zA-Z_]+( [a-zA-Z_]+)*$/)]),
     coffeeType: new FormControl('', [Validators.required])
@@ -39,7 +44,7 @@ export class CoffeeComponent implements OnInit{
   }
 
   save(){
-    this.data.save(this.coffee, (result: any) => {
+    this.data.save({ ...this.coffee, userId: this.currentUser._id}, (result: any) => {
       if (result){
         this.router.navigate(["/"]);
       }
@@ -51,12 +56,48 @@ export class CoffeeComponent implements OnInit{
     }
   }
 
+  handleOfflineIndexDB(){
+    const request = indexedDB.open("coffees", 1);
+    request.onerror = (error) => {
+      reportError(request.error);
+      if (this.db){
+        this.db.close();
+      }
+    }
+    request.onsuccess = (event: any) => {
+      this.db = request.result;
+    }
+    request.onupgradeneeded = function(event) {
+      const db = request.result;
+      if (event.oldVersion < 1){
+        const coffeeList = db.createObjectStore("coffeeList", {keyPath: "_id"});
+        const placeIndex = coffeeList.createIndex("by_place", "place");
+      }
+    }
+    if (this.db){
+      this.db.onversionchange = () => {
+      // First, save any unsaved data:
+        this.save();
+        if (!document.hasFocus()) {
+          location.reload();
+        } else {
+            alert("Please reload this page for the latest version.");
+          }
+      };
+    };
+  }
+
   public validateControl = (controlName: string, errorName: string) =>{  
     const control = this.newCoffeeGroup.get(controlName);
     return control?.dirty && !control?.touched && control?.hasError(errorName);
   }
 
   ngOnInit(){
+    this.auth.userObject$.subscribe(user => {
+      if (user){
+        this.currentUser = user;
+      }
+    })
     this.coffee = new Coffee();
     this.routingSubscription = this.route.params.subscribe(params => {
       console.log(params["id"]);
@@ -65,37 +106,8 @@ export class CoffeeComponent implements OnInit{
         this.data.getCoffee(params["id"], (response: Coffee) => this.coffee = response);
       }
     });
-    if ((navigator as any).offline){
-      const request = indexedDB.open("coffees", 1);
-      request.onerror = (error) => {
-        reportError(request.error);
-        if (this.db){
-          this.db.close();
-        }
-      }
-      request.onsuccess = (event: any) => {
-        this.db = request.result;
-      }
-      request.onupgradeneeded = function(event) {
-        const db = request.result;
-        if (event.oldVersion < 1){
-          const coffeeList = db.createObjectStore("coffeeList", {keyPath: "_id"});
-          const placeIndex = coffeeList.createIndex("by_place", "place");
-        }
-      }
-      if (this.db){
-        this.db.onversionchange = () => {
-        // First, save any unsaved data:
-          this.save();
-          if (!document.hasFocus()) {
-            location.reload();
-          } else {
-              alert("Please reload this page for the latest version.");
-            }
-        };
-      };
-    }
-
+    
+    window.addEventListener('offline', this.handleOfflineIndexDB);
     this.geolocation.requestGeoLocation((location: any) => {
       if (location && this.coffee.location){
         this.coffee.location.latitude = location.latitude;

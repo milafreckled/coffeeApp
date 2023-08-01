@@ -9,19 +9,14 @@ import { HttpClient } from '@angular/common/http';
 export class DataService {
 
   constructor(private http: HttpClient) { }
-  public endpoint = 'http://localhost:3000';
+  public endpoint = 'http://localhost:3000/coffee';
 
-  getList(callback: Function){
-    this.http.get(`${this.endpoint}/coffees`)
+  getList(userId: string, callback: Function){
+    this.http.get(`http://localhost:3000/userCoffees?userId=${userId}`)
      .subscribe((response: any) => {
       console.log(response)
       callback(response)
   })
-    // const list = [
-    //   new Coffee('Double Espresso', 'Niewylej', new PlaceLocation("ul. Żwirki i Wigury 4", "Lublin")),
-    //   new Coffee('Caramel Latte', 'Heca', new PlaceLocation("ul. Hipoteczna 5", "Lublin"))
-    // ]
-    // callback(list);
   }
 
   deleteCoffee(coffee: Coffee, callback: Function){

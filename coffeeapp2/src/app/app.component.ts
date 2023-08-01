@@ -1,14 +1,21 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker'
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   constructor(private snackBar: MatSnackBar,
-    private swUpdate: SwUpdate){ 
+    private swUpdate: SwUpdate, private router: Router, private auth: AuthService){ }
+  isLoggedIn!: boolean;
+  
+  onLogout() {
+    this.auth.logout()
   }
 
   updateNetworkStatusUI(){
@@ -28,14 +35,21 @@ export class AppComponent {
     })
   }
   ngOnInit(){
+    this.auth.userObject$.subscribe(user => {
+      if (user){
+        this.isLoggedIn = true;
+      }else{
+        this.isLoggedIn = false;
+        this.router.navigate(["/login"])
+      }
+    })
     this.swUpdate.versionUpdates.subscribe(update => {
       switch (update.type){
         case 'VERSION_DETECTED':  
           const sb = this.snackBar.open("Do you want to install this app?", "Install now", {duration: 4000});       
           sb.onAction().subscribe(e =>  this.swUpdate.activateUpdate());
           console.log(`Downloading new app version: ${update.version.hash}`);
-          location.reload();
-      
+          location.reload();  
           break;
         case 'VERSION_READY':
           console.log(`Current app version: ${update.currentVersion.hash}`);

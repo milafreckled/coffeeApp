@@ -1,6 +1,8 @@
 <mat-toolbar color="primary">
   <h1>My Coffee app</h1>
   <a (click)="subscribeToPush()" matButton><mat-icon>message</mat-icon></a>
+  <a *ngIf="!isLoggedIn" class="login-btn" routerLink='/login'><button  color="accent" mat-raised-button>Log In</button></a>
+  <a *ngIf="isLoggedIn" class="login-btn" (click)="onLogout()"><button  color="accent" mat-raised-button>Log Out</button></a>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

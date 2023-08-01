@@ -3,6 +3,8 @@ import { DataService } from '../data.service';
 import { Coffee } from '../logic/Coffee';
 import { Router } from '@angular/router';
 import { GeoLocationService } from '../geo-location.service';
+import { AuthService } from '../auth.service';
+import { User } from '../logic/User';
 
 @Component({
   selector: 'app-list',
@@ -10,13 +12,23 @@ import { GeoLocationService } from '../geo-location.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent {
-  coffeeList!: [Coffee];
-  constructor(private data: DataService, private router: Router, private geolocation: GeoLocationService){ }
+  coffeeList!: Coffee[];
+  currentUser!: User;
+  constructor(private data: DataService, private router: Router,
+    private geolocation: GeoLocationService, private auth: AuthService){ }
 
   ngOnInit(){
-    this.data.getList((list: [Coffee]) => {
-      this.coffeeList = list;
+    this.auth.userObject$.subscribe(user => {
+      console.log(user);
+      if (user){
+        this.currentUser = user;
+        this.data.getList(user._id, (response: any) => {
+          this.coffeeList = response.message;
+        });
+      }
     })
+    
+    window.addEventListener('online', this.handleOnlineIndexDB);
   }
 
   goToDetails(coffee: Coffee){
@@ -50,4 +62,19 @@ export class ListComponent {
     }
   }
 
+  handleOnlineIndexDB(){
+    const request = indexedDB.open("coffees");
+    request.onerror = (error) => {
+      reportError(request.error);
+    }
+    request.onsuccess = (event: any) => {
+      const db = request.result;
+      const tx = db.transaction(["coffees"], "readonly");
+      const coffeeStore = tx.objectStore("coffees");
+      const coffeeValues = coffeeStore.getAll() as unknown as Coffee[];
+      if (coffeeValues){
+        this.coffeeList = this.coffeeList.concat(coffeeValues);
+      }    
+  }
+}
 }

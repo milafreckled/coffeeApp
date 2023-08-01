@@ -22,18 +22,25 @@ import { Routes, RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { LoginComponent } from './login/login.component';
+import {  authCheckFunction } from './authCheckFunction';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
-  { path: "", component: ListComponent},
+  { path: "", canActivate: [authCheckFunction()], component: ListComponent},
   { path: "coffee", component: CoffeeComponent},
-  {path: "coffee/:id", component: CoffeeComponent}
+  {path: "coffee/:id", component: CoffeeComponent},
+  {path: "login", component: LoginComponent},
+  {path: "register", component: RegisterComponent}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
-    CoffeeComponent
+    CoffeeComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

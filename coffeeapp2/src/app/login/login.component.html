@@ -1,0 +1,15 @@
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+<mat-card >
+    <mat-form-field>
+        <input matInput name="username" placeholder="Username" formControlName="username"/>
+    </mat-form-field>
+    <mat-error *ngIf="loginForm.get('username')?.dirty && loginForm.get('username')?.untouched && loginForm.hasError('username', 'required')">Password is required</mat-error>
+    <mat-form-field>
+        <input matInput type="password" name="password" placeholder="Password" formControlName="password"/>
+    </mat-form-field>
+    <mat-error *ngIf="loginForm.get('passwordConfirmation')?.dirty && loginForm.get('password')?.untouched && loginForm.hasError('password', 'required')">Password is required</mat-error>
+    <mat-error *ngIf="loginForm.get('passwordConfirmation')?.dirty && loginForm.get('password')?.untouched && loginForm.hasError('pattern', 'passwordConfirmation')">Invalid pattern</mat-error>
+    <button mat-button color="primary" type="submit">Log In</button>
+    <a mat-button href="/register">No account? Register here.</a>
+</mat-card>
+</form>

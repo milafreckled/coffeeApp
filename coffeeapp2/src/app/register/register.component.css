@@ -1,0 +1,10 @@
+form{
+    max-width: 90vw;
+    margin-top: 1rem;
+    border-radius: 20%;
+    margin-inline: auto;
+}
+
+mat-card{
+    padding: 3% 5%;
+}

@@ -1,5 +1,4 @@
-{"name":"Oat Cappuccino","place":"Niewylej","location":null,"type":"Cappucino","_id":"VpuaAVXLHDEY8uVC"}
-{"name":"","place":"Some place","location":null,"_id":"C5qo7SrQMv0bAKxh"}
-{"$$deleted":true,"_id":"C5qo7SrQMv0bAKxh"}
-{"$$deleted":true,"_id":"VpuaAVXLHDEY8uVC"}
-{"name":"Vanilla Latte","place":"Starbucks","location":null,"type":"Latte","_id":"I76AmluuUY8RVR0w"}
+{"name":"Espresso Affogato","place":"Creamy Caffee","location":null,"type":"Espresso","tastingRating":{},"_id":"CzGxlx0GgK9GPI5o"}
+{"name":"Cold Brew","place":"Niewylej","location":null,"type":"Espresso","userId":"1L3RigSqkVeH3c08","_id":"OGNDWcpDKotf2JKz"}
+{"name":"Vanilla Latte","place":"Starbucks","location":null,"type":"Latte","_id":"Twdkl6azHxVoGNs2"}
+{"name":"Ice Latte","place":"Niewylej","location":null,"type":"Latte","_id":"q712cJVDFpqQtSqP"}

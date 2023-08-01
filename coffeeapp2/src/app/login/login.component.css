@@ -1,0 +1,14 @@
+form{
+    max-width: 90vw;
+    margin-top: 1rem;
+    border-radius: 20%;
+    margin-inline: auto;
+}
+
+input{
+    max-width: 50%;
+}
+
+mat-card{
+    padding: 3% 5%;
+}

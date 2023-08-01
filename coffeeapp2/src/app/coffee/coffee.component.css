@@ -1,5 +1,9 @@
+form{
+    max-width: 60vw;
+    margin: 20px auto 0 auto;
+}
 mat-card{
-    margin: 20px;
+    padding: 20px;
 }
 
 input{
@@ -14,6 +18,10 @@ mat-card-title{
     font-size: larger;
 }
 
-mat-slider{
-    width: 90%;
+section#tastingRating {
+    display: flex;
+}
+
+ mat-slider{
+    display: block;
 }

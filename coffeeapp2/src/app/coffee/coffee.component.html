@@ -5,12 +5,14 @@
             <input matInput placeholder="Coffee name" name="coffee" formControlName="name"
             [(ngModel)]="coffee.name"/>      
         </mat-form-field>
-        <mat-error *ngIf="validateControl('name', 'require')">Coffee name is required</mat-error>
+        <mat-error *ngIf="validateControl('name', 'required')">Coffee name is required</mat-error>
         <mat-error *ngIf="validateControl('name', 'pattern')">Coffee name is invalid</mat-error>
         <mat-form-field>
             <input matInput placeholder="Place name" name="place" formControlName="place"
             [(ngModel)]="coffee.place"/>
         </mat-form-field>
+        <mat-error *ngIf="validateControl('place', 'required')">Place name is required</mat-error>
+        <mat-error *ngIf="validateControl('place', 'pattern')">Place name is invalid</mat-error>
         <mat-form-field *ngIf="coffee.location">
             <input matInput placeholder="Address" name="address" formControlName="location"
             [(ngModel)]="coffee.location.address" pattern="/\w+(\s\w+){2,}/"/>
@@ -25,6 +27,7 @@
         <mat-card-subtitle>Overall Rating</mat-card-subtitle>
         <mat-slider min="0" max="10" showTickMarks discrete name="coffee.rating" [(ngModel)]="coffee.rating"
         step="1"><input matSliderThumb></mat-slider>
+        <mat-error *ngIf="validateControl('rating', 'required')">Coffee name is required</mat-error>
         <mat-slide-toggle #tastingSelector (change)="tastingRatingChecked(tastingSelector.checked)">Tasting Rating</mat-slide-toggle>
         <section *ngIf="tastingSelector.checked" id="tasting-rating">
             <label>Aroma</label>
@@ -54,6 +57,7 @@
             <mat-select placeholder="Coffee type" name="coffeType" [(ngModel)]="coffee.type" formControlName="coffeeType" required>             
                 <mat-option *ngFor="let type of types" [value]="type">{{type}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="validateControl('coffeeType', 'required')">Coffee type is required</mat-error> 
     </mat-card> 
         <mat-card>
             <textarea matInput placeholder="Notes" name="notes"
